@@ -1,7 +1,9 @@
 package rdd
 
 import org.apache.spark.{SparkConf, SparkContext}
-
+/*
+  Simple Word Count Example
+ */
 object WordCount extends App {
   val conf = new SparkConf().setMaster("local").setAppName("Word-Count")
   val sc = new SparkContext(conf)
