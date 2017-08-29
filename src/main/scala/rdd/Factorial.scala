@@ -26,9 +26,9 @@ object Factorial extends App {
   var result = time(factorial(num))
   println(s"Factorial Without Using Spark $result")
 
-  val conf = new SparkConf().setMaster("local").setAppName("Factorial")
+  val conf = new SparkConf().setMaster("local[*]").setAppName("Factorial")
   val sc = new SparkContext(conf)
-
+  sc.setLogLevel("ERROR")
   def factorialUsingSpark(num: BigInt): BigInt = {
     if (num == 0) BigInt(1)
     else {
@@ -40,5 +40,4 @@ object Factorial extends App {
   var resultUsingSpark = time(factorialUsingSpark(num))
   println(s"Factorial Using Spark $resultUsingSpark")
   println("Are two equal? " + (result == resultUsingSpark))
-  sc.stop()
 }
