@@ -42,3 +42,40 @@ Notice here that for the key-value pair (3, 6), it produces (3,Range()) since 6 
 what flatMap does is it "breaks down" collections into the elements of the collection.
 if we do rdd.mapValues(x  => x to 5).flatMap(x => x)
 We will get Array((1,2), (1,3), (1,4), (1,5), (3,4), (3,5))
+
+keys() : Return an RDD of just the keys.
+scala> rdd.keys.collect
+res34: Array[Int] = Array(1, 3, 3)
+
+values: Return an RDD of just the values.
+scala> rdd.values.collect
+res35: Array[Int] = Array(2, 4, 6)
+
+sortByKey(): Return an RDD sorted by the key.
+scala> rdd.sortByKey().collect
+res38: Array[(Int, Int)] = Array((1,2), (3,4), (3,6))
+
+
+Transformations on two pair RDDs
+val rdd = sc.parallelize(List((1, 2), (3, 4), (3, 6)))
+val other = sc.parallelize(List((3, 9)))
+
+subtractByKey: Remove elements with a key present in the other RDD.
+scala> rdd.subtractByKey(other).collect
+res40: Array[(Int, Int)] = Array((1,2))
+
+join: Perform an inner join between two RDDs.
+scala> rdd.join(other).collect
+res42: Array[(Int, (Int, Int))] = Array((3,(4,9)), (3,(6,9)))
+
+rightOuterJoin: Perform a join between two RDDs where the key must be present in the first RDD.
+scala> rdd.rightOuterJoin(other).collect
+res43: Array[(Int, (Option[Int], Int))] = Array((3,(Some(4),9)), (3,(Some(6),9)))
+
+leftOuterJoin: Perform a join between two rdd. RDDs where the key must be present in the other RDD.
+scala> rdd.leftOuterJoin(other).collect
+res45: Array[(Int, (Int, Option[Int]))] = Array((1,(2,None)), (3,(4,Some(9))), (3,(6,Some(9))))
+
+cogroup: Group data from both RDDs sharing the same key.
+scala> rdd.cogroup(other).collect
+res47: Array[(Int, (Iterable[Int], Iterable[Int]))] = Array((1,(CompactBuffer(2),CompactBuffer())), (3,(CompactBuffer(4, 6),CompactBuffer(9))))
