@@ -28,16 +28,15 @@ mapValues(function): Apply a function to each value of a pair RDD without changi
 scala> rdd.mapValues(value => value * 2).collect
 res24: Array[(Int, Int)] = Array((1,4), (3,8), (3,12))
 
-flatMapValues(function): Apply a function that returns an iterator to each value of a pair RDD, and for each element returned,
-                          produce a key/value entry with the oldkey. Often used for tokenization.
+flatMapValues(function): Apply a function that returns an iterator to each value of a pair RDD, and for each element              returned,produce a key/value entry with the oldkey. Often used for tokenization.
 scala> rdd.flatMapValues(value => (value to 5)).collect
 res30: Array[(Int, Int)] = Array((1,2), (1,3), (1,4), (1,5), (3,4), (3,5))
 
 What is happening here? We have an RDD , val rdd = sc.parallelize(List((1, 2), (3, 4), (3, 6)))
-Now flatMapValues method is a combination of flatMap and mapValues. What mapValues does is that it maps the values while keeping the keys.
-example,
+Now flatMapValues method is a combination of flatMap and mapValues. What mapValues does is that it maps the values while keeping the keys. example,
 scala> rdd.mapValues(x  => x to 5).collect
 res33: Array[(Int, scala.collection.immutable.Range.Inclusive)] = Array((1,Range(2, 3, 4, 5)), (3,Range(4, 5)), (3,Range()))
+
 Notice here that for the key-value pair (3, 6), it produces (3,Range()) since 6 to 5 does not produce a non-empty collection of values.
 what flatMap does is it "breaks down" collections into the elements of the collection.
 if we do rdd.mapValues(x  => x to 5).flatMap(x => x)
