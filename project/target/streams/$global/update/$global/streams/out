@@ -6070,7 +6070,7 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#template-resolver;0.1!template-resolver.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.6!jline.jar
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar
-[debug] :: resolution report :: resolve 1292ms :: artifacts dl 64ms
+[debug] :: resolution report :: resolve 1345ms :: artifacts dl 34ms
 [debug] 	report for default#learningspark-build;0.1-SNAPSHOT compile produced in /home/knoldus/Downloads/LearningSpark/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-learningspark-build-compile.xml
 [debug] 	report for default#learningspark-build;0.1-SNAPSHOT runtime produced in /home/knoldus/Downloads/LearningSpark/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-learningspark-build-runtime.xml
 [debug] 	report for default#learningspark-build;0.1-SNAPSHOT test produced in /home/knoldus/Downloads/LearningSpark/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-learningspark-build-test.xml
@@ -6084,5 +6084,5 @@
 [debug] 	report for default#learningspark-build;0.1-SNAPSHOT docs produced in /home/knoldus/Downloads/LearningSpark/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-learningspark-build-docs.xml
 [debug] 	report for default#learningspark-build;0.1-SNAPSHOT pom produced in /home/knoldus/Downloads/LearningSpark/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-learningspark-build-pom.xml
 [debug] 	report for default#learningspark-build;0.1-SNAPSHOT scala-tool produced in /home/knoldus/Downloads/LearningSpark/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-learningspark-build-scala-tool.xml
-[debug] 	resolve done (1292ms resolve - 64ms download)
+[debug] 	resolve done (1345ms resolve - 34ms download)
 [info] Done updating.

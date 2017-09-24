@@ -4,7 +4,7 @@
 		module="learningspark-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20170826191313"
+		publication="20170924100619"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

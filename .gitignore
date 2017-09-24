@@ -1,3 +1,6 @@
 .idea/*
 .idea/
 target/
+PairRDD.md
+checkpoint/
+src/test/
