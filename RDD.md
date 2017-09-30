@@ -44,3 +44,20 @@ and	the	most	preferred)	or	disk	(the	least	preferred	due	to	access	speed).
   
  **Partitioned** — records	are	partitioned	(split	into	logical	partitions)	and	distributed	across
 nodes	in	a	cluster.
+
+**Partitions**	are	the	units	of	parallelism.	You	can	control	the	number	of	partitions	of	a	RDD
+using	repartition	or	coalesce	transformations.	Spark	tries	to	be	as	close	to	data	as	possible
+without	wasting	time	to	send	data	across	network	by	means	of	RDD	shuffling,	and	creates
+as	many	partitions	as	required	to	follow	the	storage	layout	and	thus	optimize	data	access.	It
+leads	to	a	one-to-one	mapping	between	(physical)	data	in	distributed	data	storage,	e.g.
+HDFS	or	Cassandra,	and	partitions.
+
+RDDs	support	two	kinds	of	operations:
+**transformations**	-	lazy	operations	that	return	another	RDD.
+**actions**	-	operations	that	trigger	computation	and	return	values.
+
+The motivation to create RDD were two types of applications that current computing frameworks handle inefficiently:
+**iterative algorithms** in machine learning and graph computations.
+**interactive data mining**	tools as ad-hoc	queries	on the same dataset.
+The	goal	is	to	reuse	intermediate	in-memory	results	across	multiple	data-intensive
+workloads	with	no	need	for	copying	large	amounts	of	data	over	the	network.
