@@ -52,12 +52,12 @@ as	many	partitions	as	required	to	follow	the	storage	layout	and	thus	optimize	da
 leads	to	a	one-to-one	mapping	between	(physical)	data	in	distributed	data	storage,	e.g.
 HDFS	or	Cassandra,	and	partitions.
 
-RDDs	support	two	kinds	of	operations:
-**transformations**	-	lazy	operations	that	return	another	RDD.
-**actions**	-	operations	that	trigger	computation	and	return	values.
+RDDs support two kinds of operations:
+**transformations**- lazy operations that return another RDD.
+**actions**- operations	that trigger computation and return values.
 
 The motivation to create RDD were two types of applications that current computing frameworks handle inefficiently:
 **iterative algorithms** in machine learning and graph computations.
-**interactive data mining**	tools as ad-hoc	queries	on the same dataset.
-The	goal	is	to	reuse	intermediate	in-memory	results	across	multiple	data-intensive
-workloads	with	no	need	for	copying	large	amounts	of	data	over	the	network.
+**interactive data mining** tools as ad-hoc queries on the same dataset.
+
+The goal is to reuse intermediate in-memory results across multiple data-intensive workloads with no need for copying	large amounts of data over the network.
