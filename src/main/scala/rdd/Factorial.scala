@@ -10,7 +10,7 @@ object Factorial extends App {
     val t0 = System.currentTimeMillis()
     val result = block    // call-by-name
     val t1 = System.currentTimeMillis()
-    println("Elapsed time: " + (t1 - t0)/1000 + "s")
+    println("Elapsed time: " + (t1 - t0) + " millisecs")
     result
   }
 
@@ -24,7 +24,18 @@ object Factorial extends App {
   }
 
   var result = time(factorial(num))
-  println(s"Factorial Without Using Spark $result")
+  //println(s"Factorial Without Using Spark $result")
+  
+  def factorialPar(num: BigInt): BigInt = {
+    if (num == 0) BigInt(1)
+    else {
+	  val list = (BigInt(1) to num).toList
+	  list.par.reduce(_ * _)
+    }
+  }
+
+  var resultPar = time(factorialPar(num))
+  //println(s"Factorial Using Par $resultPar")
 
   val conf = new SparkConf().setMaster("local[*]").setAppName("Factorial")
   val sc = new SparkContext(conf)
@@ -38,6 +49,10 @@ object Factorial extends App {
   }
 
   var resultUsingSpark = time(factorialUsingSpark(num))
-  println(s"Factorial Using Spark $resultUsingSpark")
-  println("Are two equal? " + (result == resultUsingSpark))
+  //println(s"Factorial Using Spark $resultUsingSpark")
+  println("Are \"Scala vanilla\" and Spark equal? " + (result == resultUsingSpark))
+  
+  // is the Par version computing the right result?
+  println("Are Par and Spark equal? " + (resultPar == resultUsingSpark))
+
 }
