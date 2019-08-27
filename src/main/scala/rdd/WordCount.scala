@@ -9,7 +9,7 @@ object WordCount extends App {
   val sc = new SparkContext(conf)
   sc.setLogLevel("ERROR")
 
-  val lines = sc.textFile("src/main/scala/resources/sample")
+  val lines = sc.textFile("src/main/resources/sample")
   val words = lines.flatMap(line => line.split(" "))
   val counts = words.map(word => (word, 1)).reduceByKey { case (x, y) => x + y }
 
