@@ -9,6 +9,7 @@ import streaming.LoggerHelper
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration._
+import scala.language.postfixOps
 import scala.util.Random
 
 object DataStreamer extends App with LoggerHelper {
@@ -27,7 +28,7 @@ object DataStreamer extends App with LoggerHelper {
   val randomWords = List("confluent", "databricks", "lightbend", "datastax", "akka")
 
   info("Streaming words to kafka..")
-  system.scheduler.schedule(0 seconds, 100 milliseconds) {
+  system.scheduler.schedule(0 seconds, 1 seconds) {
     Random.shuffle(randomWords).foreach { word =>
       producer.send(new ProducerRecord[String, String]("topic", word))
     }
