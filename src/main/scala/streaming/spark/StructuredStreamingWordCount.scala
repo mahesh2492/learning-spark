@@ -47,6 +47,7 @@ object StructuredStreamingWordCount extends App with LoggerHelper {
       .groupBy("word")
       .agg(sum("count").as("count"))
       .writeStream
+      .option("checkpointLocation", "src/main/checkpointing")
       .outputMode(OutputMode.Update())
       .foreach(writeToCassandra)
       .start()
