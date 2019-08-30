@@ -32,4 +32,6 @@ object DataFrameExamples extends App {
   //filtering a dataframe
   df.filter(col("count") > 23).show(4)
 
+  df.createOrReplaceTempView("dftable")
+  df.sqlContext.sql("select * from dftable;").show(4)
 }
