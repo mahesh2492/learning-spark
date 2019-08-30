@@ -3,7 +3,7 @@ package dataframe
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 
-object DataFrameBooleanOperations extends App {
+object BooleanOperations extends App {
 
   val spark: SparkSession = SparkSession.builder().master("local").appName("dataframe-operations").getOrCreate()
 
