@@ -1,7 +1,8 @@
 package dataframe
 
 import dataframe.Constants._
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 
 object AggregationOperation extends App {
@@ -70,4 +71,96 @@ object AggregationOperation extends App {
 
   //Aggregating to complex type
   modifiedDf.select(collect_list("InvoiceNo"), collect_set("Quantity")).show(1)
+
+  //Group InvoiceNo, CustomerId and get the count
+  modifiedDf.groupBy("InvoiceNo", "CustomerId").count().show(2)
+
+
+  modifiedDf.groupBy("InvoiceNo").agg(
+    count("Quantity").alias("Quant"),
+    expr("count(Quantity)")
+  ).show(2)
+
+  //Grouping with Maps
+  modifiedDf.groupBy("InvoiceNo").agg("Quantity" -> "avg", "Quantity" -> "stddev_pop").show(2)
+
+  /*
+    Window function: It returns the value for over a particular frame of data. First add date to it.
+   */
+
+  val dfWithDate = modifiedDf.withColumn("date", to_date(col("InvoiceDate"), "MM/d/yyyy H:mm"))
+/*
+  Created window
+ */
+  val window = Window.partitionBy("CustomerId", "date")
+    .orderBy(col("Quantity").desc)
+    .rowsBetween(Window.unboundedPreceding, Window.currentRow)
+
+  //max purchase quantity over that window
+  val maxPurchaseQuantity: Column = max(col("Quantity")).over(window)
+  val purchaseDenseRank = dense_rank()
+    .over(window)
+  val purchaseRank = rank().over(window)
+
+  dfWithDate.where("CustomerId is not null").orderBy("CustomerId")
+    .select(
+    col("CustomerId"),
+    col("date"),
+    col("Quantity"),
+    purchaseRank.alias("quantityRank"),
+    purchaseDenseRank.alias("quantityDenseRank"),
+    maxPurchaseQuantity.alias("maxPurchaseQuantity")
+  ).show(4)
+
+  /*
+    Arbitrary aggregations: Aggregation across multiple groups.
+    Get the total quantity of all stock codes and customer.
+    Grouping set depend on null values for aggregation levels. Always first filter out null values.
+   */
+
+  dfWithDate.drop()
+    .groupBy("StockCode", "CustomerId")
+    .agg(sum(col("Quantity")).as("sum"))
+    .select("CustomerId", "StockCode", "sum")
+    .orderBy(col("CustomerId").desc, col("StockCode").desc).show()
+
+  /*
+  rollup -> multidimensional aggregation that performs a variety of groups-by-style calculation for us.
+  Calculate the grand total of all dates and total of each date in the dataFrame and the subtotal for
+  each country on each date in the dataFrame
+   */
+
+  dfWithDate.drop().rollup("date", "Country").agg(sum("Quantity"))
+    .selectExpr("date", "Country", "`sum(Quantity)`")
+    .orderBy("date")
+    .show()
+
+  /*
+  Finally cube: it takes a rollup to a level deeper.
+  Find following in 1 query
+  The total across all dates and countries.
+  The total for each date across all country.
+  The total for each country on each date.
+  The total for each country across all dates.
+  */
+
+  dfWithDate.drop().cube("date", "Country")
+    .agg(sum(col("Quantity")))
+    .select("date", "Country", "`sum(Quantity)`")
+    .orderBy("date").show()
+
+  /*
+     Want to query the rollup/cube results?
+   */
+
+  dfWithDate.show(5)
+
+  dfWithDate.cube("CustomerId", "StockCode")
+    .agg(grouping_id(), sum("Quantity")).orderBy(desc("grouping_id()"))
+    .show()
+
+  // Pivot:  Converting a row to column
+  val pivoted = dfWithDate.groupBy("date").pivot("Country").sum()
+  pivoted.show()
+  pivoted.where("date > '2010-11-5'").select("date", "`Australia_sum(Quantity)`").show(4)
 }
