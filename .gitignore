@@ -16,3 +16,4 @@ project/target
 *.swp
 .worksheet
 *.sc
+src/main/tmp/
