@@ -19,4 +19,12 @@ object BasicOperations extends App {
      """.stripMargin)
     .where("DEST_COUNTRY_NAME like 'S%'").where("`sum(count)` > 10")
     .show() // SQl => DF
+
+  // creating a table from json file
+
+  spark.sql("""
+      create table flights (
+      DEST_COUNTRY_NAME string, ORIGIN_COUNTRY_NAME string, count long))
+      using json options(path, 'src/main/resources/2015-summary.json')
+    """.stripMargin).show(5)
 }
